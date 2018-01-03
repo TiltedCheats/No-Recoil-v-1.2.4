@@ -1,0 +1,62 @@
+local recoil = false
+local rapidfire = false
+
+
+function OnEvent(event, arg)
+OutputLogMessage("event = %s, arg = %s\n", event, arg)
+
+if (event == "PROFILE_ACTIVATED") then
+	EnablePrimaryMouseButtonEvents(true)
+end
+
+if (event == "MOUSE_BUTTON_PRESSED" and arg == 5) then
+	if (IsModifierPressed("shift")) then
+		recoil = not recoil 
+		rapidfire = false
+			if (recoil == true) then
+				OutputLogMessage("Recoil is On\n")
+			else
+				OutputLogMessage("Recoil is Off\n")
+			end
+	else
+		OutputLogMessage("Recoil is Off\n")
+	end
+end
+
+
+if (event == "MOUSE_BUTTON_PRESSED" and arg == 1 and recoil == true and rapidfire == false)  then
+	if IsMouseButtonPressed(1) and IsMouseButtonPressed(3)then 
+		repeat
+			MoveMouseRelative(-1,7)
+			Sleep(14)
+			MoveMouseRelative(1,-7)
+			Sleep(14)
+		until not IsMouseButtonPressed(1) or not IsMouseButtonPressed(3)
+	end
+end
+
+if (event == "MOUSE_BUTTON_PRESSED" and arg == 5) then
+	if IsModifierPressed("alt") then
+		rapidfire = not rapidfire
+		recoil = false
+			if (rapidfire == true) then
+				OutputLogMessage("Rapidfire is On\n")
+			else
+				OutputLogMessage("Rapidfire is Off\n")
+			end
+	else
+		OutputLogMessage("Rapidfire is Off\n")
+	end
+
+end
+
+if (event == "MOUSE_BUTTON_PRESSED" and arg == 4 and recoil == false and rapidfire == true) then
+		repeat
+			PressMouseButton(1)
+			Sleep(64)
+			ReleaseMouseButton(1)
+			Sleep(73)
+		until IsModifierPressed("shift")
+end
+
+end
